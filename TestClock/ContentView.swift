@@ -12,12 +12,11 @@ struct ContentView: View {
     
     var timeFormat: DateFormatter {
         let formatter = DateFormatter()
-        formatter.dateFormat = "hh:mm:ss a"
+        formatter.dateFormat = "hh:mm:ssa"
         return formatter
     }
     
-    
-    func timeCharacters(date: Date) -> [String] {
+    func timeCharactersArray(date: Date) -> [String] {
         let time: String = timeFormat.string(from: date)
         let timeArray = time.map{String($0)}
         return timeArray
@@ -25,13 +24,14 @@ struct ContentView: View {
     
     var body: some View {
         HStack {
-            ForEach(timeCharacters(date: date), id: \.self) { digit in
+            ForEach(timeCharactersArray(date: date).indices, id: \.self) { index in
                 withAnimation(.linear(duration: 0.25), {
-                Text(digit)
+                Text(timeCharactersArray(date: date)[index])
                     .padding()
+                    .frame(width: 50, height: 100)
                     .background(SwiftUI.Color.gray)
                     .transition(.opacity)
-                    .id("digitz" + timeCharacters(date: date).description)
+                    .id(timeCharactersArray(date: date)[index].description)
                     .onAppear(perform: {let _ = self.updateTimer})
                 })
             }
@@ -42,14 +42,11 @@ struct ContentView: View {
     var updateTimer: Timer {
          Timer.scheduledTimer(withTimeInterval: 1, repeats: true,
                               block: {_ in
+                                withAnimation(.linear(duration: 0.25), {
                                  self.date = Date()
-                                
+                                })
                                })
+            
     }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+    
 }
