@@ -40,18 +40,60 @@ struct ContentView: View {
     var body: some View {
         HStack {
             Group {
-            Text(timeCharacters(date: date)[0]) + Text(" : ") + Text(timeCharacters(date: date)[2])
-            }.onAppear(perform: {let _ = self.updateTimer})
+            Text(timeCharacters(date: date)[0])
+                .padding()
+                .background(SwiftUI.Color.gray)
+                .transition(.opacity)
+                .id("digitz" + timeCharacters(date: date)[0].description)
+                .onAppear(perform: {let _ = self.updateSecond})
+                Text(timeCharacters(date: date)[2])
+                    .padding()
+                    .background(SwiftUI.Color.gray)
+                    .transition(.opacity)
+                    .id("digitz" + timeCharacters(date: date).description)
+                    .onAppear(perform: {let _ = self.updateSecond})
+            }
         }
     }
     
-    var updateTimer: Timer {
+   /* var updateTimer: Timer {
          Timer.scheduledTimer(withTimeInterval: 1, repeats: true,
                               block: {_ in
                                  self.date = Date()
                                 
                                })
+            
     }
+    */
+    
+    var updateHour: Timer {
+         Timer.scheduledTimer(withTimeInterval: 1, repeats: true,
+                              block: {_ in
+                                 self.date = Date()
+                                
+                               })
+            
+    }
+    
+    var updateMinute: Timer {
+         Timer.scheduledTimer(withTimeInterval: 1, repeats: true,
+                              block: {_ in
+                                 self.date = Date()
+                                
+                               })
+            
+    }
+    
+    var updateSecond: Timer {
+         Timer.scheduledTimer(withTimeInterval: 1, repeats: true,
+                              block: {_ in
+                                withAnimation(.linear(duration: 0.25), {
+                                 self.date = Date()
+                                })
+                               })
+            
+    }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
