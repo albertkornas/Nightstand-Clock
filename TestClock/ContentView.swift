@@ -10,32 +10,38 @@ import SwiftUI
 struct ContentView: View {
     @State var date = Date()
     
-    var timeFormat: DateFormatter {
+    var hourFormat: DateFormatter {
         let formatter = DateFormatter()
-        formatter.dateFormat = "hh:mm:ss a"
+        formatter.dateFormat = "h"
         return formatter
     }
     
+    var minuteFormat: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "mm"
+        return formatter
+    }
     
+    var secondsFormat: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "ss a"
+        return formatter
+    }
+    
+    //Return array of hour, format, and seconds TODO: convert into dict
     func timeCharacters(date: Date) -> [String] {
-        let time: String = timeFormat.string(from: date)
-        let timeArray = time.map{String($0)}
+        let hour: String = hourFormat.string(from: date)
+        let minute: String = minuteFormat.string(from: date)
+        let second: String = secondsFormat.string(from: date)
+        let timeArray: [String] = [hour, minute, second]
         return timeArray
     }
     
     var body: some View {
         HStack {
-            ForEach(timeCharacters(date: date), id: \.self) { digit in
-                withAnimation(.linear(duration: 0.25), {
-                Text(digit)
-                    .padding()
-                    .background(SwiftUI.Color.gray)
-                    .transition(.opacity)
-                    .id("digitz" + timeCharacters(date: date).description)
-                    .onAppear(perform: {let _ = self.updateTimer})
-                })
-            }
-            
+            Group {
+            Text(timeCharacters(date: date)[0]) + Text(" : ") + Text(timeCharacters(date: date)[2])
+            }.onAppear(perform: {let _ = self.updateTimer})
         }
     }
     
